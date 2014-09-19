@@ -80,7 +80,7 @@ public class MobSpawner {
 		if (worldServer.getWorldTime() % clumping != 0) {
 			return true;
 		}
-		float entityMultiplier = worldServer.playerEntities.size() * CoreMod.getMobSpawningMultiplier();
+		float entityMultiplier = worldServer.playerEntities.size() * CoreMod.getMobSpawningMultiplier() * 0.66f;
 		if (entityMultiplier == 0) {
 			return true;
 		}
