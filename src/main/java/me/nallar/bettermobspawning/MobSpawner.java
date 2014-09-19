@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -37,7 +38,7 @@ public class MobSpawner {
 	private static Chunk getChunkFromBlockCoords(WorldServer w, int x, int z) {
 		IChunkProvider p = w.getChunkProvider();
 		if (p.chunkExists(x >> 4, z >> 4)) {
-			return p.provideChunk(x, z);
+			return p.provideChunk(x >> 4, z >> 4);
 		}
 		return null;
 	}
@@ -130,7 +131,7 @@ public class MobSpawner {
 			for (; x <= maxX; x++) {
 				for (int z = startZ; z <= maxZ; z++) {
 					long hash = hash(x, z);
-					if (!closeChunks.contains(hash) || !p.chunkExists(x >> 4, z >> 4)) {
+					if (!closeChunks.contains(hash) || !p.chunkExists(x, z)) {
 						spawnableChunks.add(hash);
 					}
 				}
@@ -151,7 +152,7 @@ public class MobSpawner {
 			int z = (int) hash;
 			int sX = x * 16 + worldServer.rand.nextInt(16);
 			int sZ = z * 16 + worldServer.rand.nextInt(16);
-			boolean surface = creatureType.getPeacefulCreature() || (dayTime ? surfaceChance++ % 5 == 0 : surfaceChance++ % 5 != 0);
+			boolean surface = !(worldServer.provider instanceof WorldProviderHell) && creatureType.getPeacefulCreature() || (dayTime ? surfaceChance++ % 5 == 0 : surfaceChance++ % 5 != 0);
 			int gap = gapChance++;
 			int sY;
 			if (creatureType == EnumCreatureType.waterCreature) {

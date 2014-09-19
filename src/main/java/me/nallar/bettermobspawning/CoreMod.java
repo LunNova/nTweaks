@@ -9,7 +9,7 @@ import java.util.*;
 @IFMLLoadingPlugin.SortingIndex(1001) // Magic value, after deobf transformer.
 public class CoreMod implements IFMLLoadingPlugin {
 	public static float getMobSpawningMultiplier() {
-		return 1f;
+		return 1.5f;
 	}
 
 	public static boolean shouldHandleSpawning(WorldServer worldServer) {
