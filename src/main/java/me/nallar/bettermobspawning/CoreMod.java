@@ -33,7 +33,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 
 	@Override
 	public void injectData(Map<String, Object> stringObjectMap) {
-		ModPatcher.getPatcher().readPatchesFromJsonString("/modpatcher.json");
+		ModPatcher.getPatcher().readPatchesFromJsonInputStream(CoreMod.class.getResourceAsStream("/modpatcher.json"));
 	}
 
 	@Override
