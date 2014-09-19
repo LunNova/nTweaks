@@ -222,7 +222,6 @@ public class MobSpawner {
 				break;
 			}
 		}
-		System.out.println("Spawned " + attemptedSpawnedMobs + " mobs");
 		profiler.endSection();
 		return true;
 	}
