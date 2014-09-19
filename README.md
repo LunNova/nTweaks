@@ -1,9 +1,11 @@
-Better Mob Spawning [![Build Status](http://nallar.me/buildservice/job/ModPatcherExample/badge/icon)](http://nallar.me/buildservice/job/ModPatcherExample/)
+nTweaks [![Build Status](http://nallar.me/buildservice/job/ModPatcherExample/badge/icon)](http://nallar.me/buildservice/job/ModPatcherExample/)
 ==========
-Mod which replaces vanilla mob spawning. Better performance, improved night-time mob spawning, much more dangerous nether.
+Tweaks and performance improvements.
+
+TODO - list what these tweaks are!
 
 Copyright &copy; 2014, nallar <rallan.pcl+gt@gmail.com>
-Better Mob Spawning is licensed under the MIT license.
+nTweaks is licensed under the MIT license.
 
 Download
 ---------
@@ -11,7 +13,7 @@ Download the latest builds from [Jenkins].
 
 Compiling
 ---------
-Better Mob Spawning is built using Gradle.
+nTweaks is built using Gradle.
 
 * Install the java development kit
 * Run `./gradlew setupDevWorkspace jar` 
