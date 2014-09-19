@@ -1,0 +1,105 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+// Extended project information
+ext.projectName = 'LogSpamMustDie'
+ext.inceptionYear = '2014'
+ext.packaging = 'jar'
+ext.url = 'http://nallar.me/minecraft'
+ext.description = 'Log Spam Must Die'
+ext.organization = 'nallar.me'
+ext.mcVersion = '1.7.10'
+ext.forgeVersion = "10.13.0.1208"
+ext.fullForgeVersion = mcVersion + "-" + forgeVersion
+
+minecraft {
+    version = fullForgeVersion
+    runDir = "eclipse/assets"
+}
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+version = mcVersion + '-SNAPSHOT'
+group = 'me.nallar'
+archivesBaseName = 'bettermobspawning'
+
+// Define variables
+ext.buildNumber = project.hasProperty("buildNumber") ? buildNumber : '0'
+ext.ciSystem = project.hasProperty("ciSystem") ? ciSystem : 'unknown'
+ext.commit = project.hasProperty("commit") ? commit : 'unknown'
+
+repositories {
+    mavenCentral()
+    maven { url 'http://repo.nallar.me/' }
+}
+
+configurations {
+    all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+    provided
+    compile.extendsFrom provided
+}
+
+dependencies {
+    provided 'com.google.guava:guava:18.0'
+    compile group:'me.nallar', name:'modpatcher', version:'1.7.10-SNAPSHOT', changing: true
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from((configurations.runtime - configurations.provided).filter{it.exists()}.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "META-INF/**"
+        exclude "mcmod.info"
+    }
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version, 'name': project.projectName
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) { exclude 'mcmod.info' }
+}
+
+// Source compiler configuration
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [ '-Xlint:all', '-Xlint:-path' ]
+    options.deprecation = true
+    options.encoding = 'utf8'
+}
+
+jar.manifest.mainAttributes(
+        "Built-By": System.properties['user.name'],
+        "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
+        "Implementation-Title": name,
+        "Implementation-Version": version + "+" + ciSystem + "-b" + buildNumber + ".git-" + commit,
+        "Implementation-Vendor": url,
+        "FMLCorePlugin": "me.nallar.bettermobspawning.CoreMod"
+)

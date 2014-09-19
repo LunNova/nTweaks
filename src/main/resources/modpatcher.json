@@ -1,0 +1,17 @@
+{
+    mods: {
+        spawningHook: {
+            class: {
+                id: "net.minecraft.world.SpawnerAnimals",
+                insertBefore: {
+                    target: findChunksForSpawning,
+                    code: """{
+                        if (me.nallar.bettermobspawning.MobSpawner.spawningHook($1, $2, $3, $4)) {
+                            return 1;
+                        }
+                    }"""
+                }
+            }
+        }
+    }
+}
