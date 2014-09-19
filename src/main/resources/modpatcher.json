@@ -3,7 +3,7 @@
         spawningHook: {
             class: {
                 id: "net.minecraft.world.SpawnerAnimals",
-                insertBefore: {
+                insertCodeBefore: {
                     target: findChunksForSpawning,
                     code: """{
                         if (me.nallar.bettermobspawning.MobSpawner.spawningHook($1, $2, $3, $4)) {

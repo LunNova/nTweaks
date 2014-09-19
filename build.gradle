@@ -18,11 +18,11 @@ buildscript {
 apply plugin: 'forge'
 
 // Extended project information
-ext.projectName = 'LogSpamMustDie'
+ext.projectName = 'BetterMobSpawning'
 ext.inceptionYear = '2014'
 ext.packaging = 'jar'
 ext.url = 'http://nallar.me/minecraft'
-ext.description = 'Log Spam Must Die'
+ext.description = 'BetterMobSpawning'
 ext.organization = 'nallar.me'
 ext.mcVersion = '1.7.10'
 ext.forgeVersion = "10.13.0.1208"
