@@ -1,12 +1,12 @@
 {
     mods: {
-        tileEntityRenderingRange: {
+        tileEntityRenderRange: {
             class: {
                 id: "net.minecraft.tileentity.TileEntity",
                 replaceMethod: {
-                    target: getMaxRenderDistanceSquared,
+                    target: "getMaxRenderDistanceSquared",
                     code: """{
-                        return 1024.0D;
+                        return 2048.0D;
                     }"""
                 }
             }

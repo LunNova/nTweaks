@@ -1,0 +1,41 @@
+<mods>
+	<tileEntityCullingCheckOrder>
+		<class id="net.minecraft.client.renderer.RenderGlobal">
+			<replaceFieldAccess field="tileEntities" readCode="{
+                            $_ = java.util.Collections.EMPTY_LIST;
+                        }">renderEntities
+			</replaceFieldAccess>
+			<insertCodeAfter code="{
+                            int pass = net.minecraftforge.client.MinecraftForgeClient.getRenderPass();
+                            ^class:TileEntityRendererDispatcher^ dispatcher = ^class:TileEntityRendererDispatcher^.^field:TileEntityRendererDispatcher/instance^;
+                            double x = dispatcher.^field:TileEntityRendererDispatcher/field_147560_j^;
+                            double y = dispatcher.^field:TileEntityRendererDispatcher/field_147561_k^;
+                            double z = dispatcher.^field:TileEntityRendererDispatcher/field_147558_l^;
+                            Iterator i = $0.^field:RenderGlobal/tileEntities^.iterator();
+                            while (i.hasNext()) {
+                                ^class:TileEntity^ tile = (^class:TileEntity^) i.next();
+                                if (tile.^method:TileEntity/shouldRenderInPass^(pass)
+                                        &amp;&amp; tile.^method:TileEntity/getDistanceFrom^(x, y, z) &lt; tile.^method:TileEntity/getMaxRenderDistanceSquared^()
+                                        &amp;&amp; $2.^method:ICamera/isBoundingBoxInFrustum^(tile.^method:TileEntity/getRenderBoundingBox^())) {
+                                    dispatcher.^method:TileEntityRendererDispatcher/renderTileEntity^(tile, $3);
+                                }
+                            }
+                        }">renderEntities
+			</insertCodeAfter>
+		</class>
+		<class id="net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher">
+			<replaceMethod code="{
+                            int x = $1.^field:TileEntity/xCoord^;
+                            int y = $1.^field:TileEntity/yCoord^;
+                            int z = $1.^field:TileEntity/zCoord^;
+                            int i = ^field:TileEntityRendererDispatcher/field_147550_f^.^method:World/getLightBrightnessForSkyBlocks^(x, y, z, 0);
+                            int j = i % 65536;
+                            int k = i / 65536;
+                            ^class:OpenGlHelper^.^method:OpenGlHelper/setLightmapTextureCoords^(^class:OpenGlHelper^.^field:OpenGlHelper/lightmapTexUnit^, (float)j / 1.0F, (float)k / 1.0F);
+                            org.lwjgl.opengl.GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                            this.^method:TileEntityRendererDispatcher/renderTileEntityAt^($1, (double)x - ^field:TileEntityRendererDispatcher/staticPlayerX^, (double)y - ^field:TileEntityRendererDispatcher/staticPlayerY^, (double)z - ^field:TileEntityRendererDispatcher/staticPlayerZ^, $2);
+                        }">renderTileEntity
+			</replaceMethod>
+		</class>
+	</tileEntityCullingCheckOrder>
+</mods>
