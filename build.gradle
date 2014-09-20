@@ -1,3 +1,9 @@
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.StandardCopyOption
+import java.nio.file.attribute.BasicFileAttributes
+
 buildscript {
     repositories {
         mavenCentral()
@@ -18,11 +24,11 @@ buildscript {
 apply plugin: 'forge'
 
 // Extended project information
-ext.projectName = 'BetterMobSpawning'
+ext.projectName = 'nTweaks'
 ext.inceptionYear = '2014'
 ext.packaging = 'jar'
 ext.url = 'http://nallar.me/minecraft'
-ext.description = 'BetterMobSpawning'
+ext.description = 'nTweaks'
 ext.organization = 'nallar.me'
 ext.mcVersion = '1.7.10'
 ext.forgeVersion = "10.13.0.1208"
@@ -38,12 +44,12 @@ targetCompatibility = '1.6'
 
 version = mcVersion + '-SNAPSHOT'
 group = 'me.nallar'
-archivesBaseName = 'bettermobspawning'
+archivesBaseName = 'nTweaks'
 
 // Define variables
-ext.buildNumber = project.hasProperty("buildNumber") ? buildNumber : '0'
-ext.ciSystem = project.hasProperty("ciSystem") ? ciSystem : 'unknown'
-ext.commit = project.hasProperty("commit") ? commit : 'unknown'
+ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
+ext.ciSystem = System.getenv("JENKINS_URL") ? 'Jenkins' : 'unknown'
+ext.commit = System.getenv("GIT_COMMIT") ?: 'unknown'
 
 repositories {
     mavenCentral()
@@ -103,3 +109,56 @@ jar.manifest.mainAttributes(
         "Implementation-Vendor": url,
         "FMLCorePlugin": "me.nallar.bettermobspawning.CoreMod"
 )
+
+afterEvaluate {
+    project.tasks.extractMinecraftSrc.doLast { task ->
+        File generatedSrcDirectory = file("./generated/src/");
+
+        generatedSrcDirectory = generatedSrcDirectory.getCanonicalFile();
+        if (generatedSrcDirectory.exists()) {
+            generatedSrcDirectory.deleteDir();
+        }
+        generatedSrcDirectory.mkdirs();
+
+        final File mainSrcDirectory = new File("./src/main/java/");
+        File directory = file("./build/tmp/recompSrc").getCanonicalFile();
+        final int cutoff = directory.toString().length();
+
+        final File finalGeneratedSrcDirectory = generatedSrcDirectory;
+        Files.walkFileTree(directory.toPath(), new SimpleFileVisitor<java.nio.file.Path>() {
+            @Override
+            public FileVisitResult visitFile(java.nio.file.Path path, BasicFileAttributes attrs)
+                    throws IOException {
+                String name = path.getFileName().toString();
+                if (!name.endsWith(".java")) {
+                    return FileVisitResult.CONTINUE;
+                }
+                String fullPath = path.toFile().getCanonicalFile().toString();
+                String partialPath = fullPath.substring(cutoff);
+                if (new File(mainSrcDirectory, partialPath).exists()) {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                File dest = new File(finalGeneratedSrcDirectory, partialPath);
+                dest.getParentFile().mkdirs();
+                Files.copy(path, dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(java.nio.file.Path file, IOException exc) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(java.nio.file.Path dir, IOException exc) throws IOException {
+                if (exc == null) {
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    // directory iteration failed; propagate exception
+                    throw exc;
+                }
+            }
+        });
+    }
+}
