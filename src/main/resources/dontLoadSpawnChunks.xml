@@ -1,0 +1,13 @@
+<patchGroups>
+	<dontLoadSpawn>
+		<class id="net.minecraftforge.common.DimensionManager">
+			<replaceMethod code="return false;">shouldLoadSpawn</replaceMethod>
+		</class>
+		<class id="">
+			<replaceMethod code="
+			this.^field:ChunkProviderServer/chunksToUnload^.add(me.nallar.ntweaks.Util.chunkKey($1, $2));
+			">unloadChunksIfNotNearSpawn</replaceMethod>
+			<replaceMethodCall code="$_ = (($1 != 0) &amp;&amp; $proceed($$));" method="shouldLoadSpawn">unloadQueuedChunks</replaceMethodCall>
+		</class>
+	</dontLoadSpawn>
+</patchGroups>

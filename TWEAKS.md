@@ -3,6 +3,7 @@
 * Performance tweaks with no noticeable change in behaviour other than performance might not be optional
 
 # Implemented tweaks
+* Significantly reduce memory used by leaked worlds
 * Improved mob spawning, ability to set a multiplier for mob spawning
 * Reduced TileEntity default render range
 

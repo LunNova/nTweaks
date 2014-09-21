@@ -1,4 +1,4 @@
-package me.nallar.bettermobspawning;
+package me.nallar.ntweaks;
 
 import java.util.*;
 

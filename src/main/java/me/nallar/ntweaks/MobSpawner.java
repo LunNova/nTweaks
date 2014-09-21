@@ -1,4 +1,4 @@
-package me.nallar.bettermobspawning;
+package me.nallar.ntweaks;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.block.Block;

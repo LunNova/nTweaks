@@ -1,9 +1,8 @@
-package me.nallar.bettermobspawning;
+package me.nallar.ntweaks;
 
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.Side;
-import me.nallar.javapatcher.mappings.MethodDescription;
 import me.nallar.modpatcher.ModPatcher;
 import net.minecraft.world.WorldServer;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +19,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 
 	private static void logToFile() {
 		FileAppender fa = FileAppender.createAppender("./logs/Patcher.log", "false", "false", "PatcherAppender", "true", "true", "true", null, null, "false", null, null);
+		fa.start();
 		((org.apache.logging.log4j.core.Logger) LogManager.getLogger("ModPatcher")).addAppender(fa);
 		((org.apache.logging.log4j.core.Logger) LogManager.getLogger("JavaPatcher")).addAppender(fa);
 		((org.apache.logging.log4j.core.Logger) log).addAppender(fa);
@@ -75,11 +75,11 @@ public class CoreMod implements IFMLLoadingPlugin {
 
 		addPatch("mobSpawning", "Improved mob spawning algorithm which scales mob caps at night and has better performance.", true);
 
+		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks, allow worlds to unload.", true);
+
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
 
 		addClientPatch("tileEntityCullingCheckOrder", "Check tile entity range culling before frustrum culling", false); // TODO determine if this actually helps
-
-		log.info(ModPatcher.getPatcher().getMappings().map(MethodDescription.fromString("net.minecraft.tileentity.TileEntity", "getMaxRenderDistanceSquared")).toString());
 	}
 
 	@Override

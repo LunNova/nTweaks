@@ -6,7 +6,7 @@
                 insertCodeBefore: {
                     target: findChunksForSpawning,
                     code: """{
-                        if (me.nallar.bettermobspawning.MobSpawner.spawningHook($1, $2, $3, $4)) {
+                        if (me.nallar.ntweaks.MobSpawner.spawningHook($1, $2, $3, $4)) {
                             return 1;
                         }
                     }"""

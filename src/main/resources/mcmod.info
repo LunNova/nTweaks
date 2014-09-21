@@ -2,8 +2,8 @@
   "modListVersion": 2,
   "modList": [{
     "modid": "mod_${name}",
-    "name": "Log Spam Must Die",
-    "description": "Example Mod Patcher coremod which removes annoying log spam",
+    "name": "nTweaks",
+    "description": "Some essential performance and utility tweaks",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "http://nallar.me/minecraft",
