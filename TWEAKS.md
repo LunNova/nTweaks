@@ -6,10 +6,10 @@
 * Significantly reduce memory used by leaked worlds
 * Improved mob spawning, ability to set a multiplier for mob spawning
 * Reduced TileEntity default render range
+* Allow dimensions to unload in more cases
 
 # TODO
 * Reduce log spam
 * Colored console output
-* Allow dimensions to unload in more cases
 * Disable spawn chunk loading
 * Asynchronous chunk loading
