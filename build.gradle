@@ -107,8 +107,8 @@ jar.manifest.mainAttributes(
         "Implementation-Title": name,
         "Implementation-Version": version + "+" + ciSystem + "-b" + buildNumber + ".git-" + commit,
         "Implementation-Vendor": url,
-        "FMLCorePlugin": "me.nallar.ntweaks.CoreMod",
-        "FMLCorePluginContainsFMLMod": "me.nallar.ntweaks.NTweaks"
+        "FMLCorePlugin": "me.nallar.ntweaks.coremod.CoreMod",
+        "FMLCorePluginContainsFMLMod": ""
 )
 
 afterEvaluate {

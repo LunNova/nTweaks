@@ -1,5 +1,7 @@
 package me.nallar.ntweaks;
 
+import me.nallar.ntweaks.coremod.CoreMod;
+
 import java.lang.ref.*;
 import java.lang.reflect.*;
 import java.util.*;

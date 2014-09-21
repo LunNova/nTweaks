@@ -1,4 +1,4 @@
-package me.nallar.ntweaks;
+package me.nallar.ntweaks.coremod;
 
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;

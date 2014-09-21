@@ -1,6 +1,7 @@
 package me.nallar.ntweaks;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import me.nallar.ntweaks.coremod.CoreMod;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
