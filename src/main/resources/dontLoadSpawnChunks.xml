@@ -2,6 +2,7 @@
 	<dontLoadSpawn>
 		<class id="net.minecraftforge.common.DimensionManager">
 			<replaceMethod code="return false;">shouldLoadSpawn</replaceMethod>
+			<insertCodeBefore code="$1 = false;">getIDs(Z)I</insertCodeBefore>
 		</class>
 		<class id="net.minecraft.world.gen.ChunkProviderServer">
 			<replaceMethod code="
