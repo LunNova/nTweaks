@@ -24,7 +24,7 @@ public class NTweaks {
 
 	@SubscribeEvent (priority = EventPriority.LOWEST)
 	public void worldUnload(WorldEvent.Unload event) {
-		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), true);
+		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), !event.world.isRemote);
 	}
 
 	public static class UnloadTickHandler {
