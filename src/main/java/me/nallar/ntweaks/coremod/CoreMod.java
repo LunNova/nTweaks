@@ -15,10 +15,10 @@ import java.util.*;
 @IFMLLoadingPlugin.SortingIndex(1001) // Magic value, after deobf transformer.
 public class CoreMod implements IFMLLoadingPlugin {
 	private static boolean isClient = FMLLaunchHandler.side() == Side.CLIENT;
-	public static final Logger log = LogManager.getLogger("nTweaks");
+	public static final Logger log = LogManager.getLogger("NTweaks");
 
 	private static void logToFile() {
-		FileAppender fa = FileAppender.createAppender("./logs/Patcher.log", "false", "false", "PatcherAppender", "true", "true", "true", null, null, "false", null, null);
+		FileAppender fa = FileAppender.createAppender("./logs/NTweaks.log", "false", "false", "PatcherAppender", "true", "true", "true", null, null, "false", null, null);
 		fa.start();
 		((org.apache.logging.log4j.core.Logger) LogManager.getLogger("ModPatcher")).addAppender(fa);
 		((org.apache.logging.log4j.core.Logger) LogManager.getLogger("JavaPatcher")).addAppender(fa);
