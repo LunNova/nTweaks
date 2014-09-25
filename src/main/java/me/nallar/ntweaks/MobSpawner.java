@@ -55,6 +55,10 @@ public class MobSpawner {
 		if (surface) {
 			return height;
 		}
+		int maxHeight = worldServer.provider.getActualHeight();
+		if (height > maxHeight) {
+			height = maxHeight;
+		}
 		boolean inGap = false;
 		int lastGap = 0;
 		for (int y = 1; y < height; y++) {
