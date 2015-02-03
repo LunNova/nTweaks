@@ -31,7 +31,7 @@ ext.url = 'http://nallar.me/minecraft'
 ext.description = 'nTweaks'
 ext.organization = 'nallar.me'
 ext.mcVersion = '1.7.10'
-ext.forgeVersion = "10.13.1.1217"
+ext.forgeVersion = "10.13.2.1230"
 ext.fullForgeVersion = mcVersion + "-" + forgeVersion
 
 minecraft {

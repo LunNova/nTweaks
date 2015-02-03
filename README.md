@@ -16,7 +16,7 @@ Compiling
 nTweaks is built using Gradle.
 
 * Install the java development kit
-* Run `./gradlew setupDevWorkspace jar` 
+* Run `./gradlew setupDevWorkspace build` 
 
 
 Coding and Pull Request Formatting
