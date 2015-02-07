@@ -56,8 +56,8 @@ public class MobSpawner {
 			return height;
 		}
 		int maxHeight = worldServer.provider.getActualHeight();
-		if (height > maxHeight) {
-			height = maxHeight;
+		if (height >= maxHeight) {
+			height = -1;
 		}
 		boolean inGap = false;
 		int lastGap = 0;
@@ -157,7 +157,7 @@ public class MobSpawner {
 			int z = (int) hash;
 			int sX = x * 16 + worldServer.rand.nextInt(16);
 			int sZ = z * 16 + worldServer.rand.nextInt(16);
-			boolean surface = !(worldServer.provider instanceof WorldProviderHell) && creatureType.getPeacefulCreature() || (dayTime ? surfaceChance++ % 5 == 0 : surfaceChance++ % 5 != 0);
+			boolean surface = !(worldServer.provider instanceof WorldProviderHell) && (creatureType.getPeacefulCreature() || (dayTime ? surfaceChance++ % 5 == 0 : surfaceChance++ % 5 != 0));
 			int gap = gapChance++;
 			int sY;
 			if (creatureType == EnumCreatureType.waterCreature) {
@@ -169,7 +169,7 @@ public class MobSpawner {
 			} else {
 				sY = getPseudoRandomHeightValue(sX, sZ, worldServer, surface, gap);
 			}
-			if (sY < 0) {
+			if (sY <= 0) {
 				continue;
 			}
 			if (worldServer.getBlock(sX, sY, sZ).getMaterial() == creatureType.getCreatureMaterial()) {
@@ -190,7 +190,7 @@ public class MobSpawner {
 						ssY = worldServer.rand.nextInt(63) + 1;
 					} else {
 						ssY = getPseudoRandomHeightValue(ssX, ssZ, worldServer, surface, gap);
-						if (ssY == -1 ||
+						if (ssY <= 0 ||
 								!worldServer.getBlock(ssX, ssY - 1, ssZ).getMaterial().isOpaque() ||
 								!worldServer.getBlock(ssX, ssY - 1, ssZ).canCreatureSpawn(creatureType, worldServer, ssX, ssY - 1, ssZ)) {
 							continue;
