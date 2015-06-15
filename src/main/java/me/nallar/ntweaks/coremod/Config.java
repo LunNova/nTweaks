@@ -9,14 +9,18 @@ import java.util.regex.*;
  */
 public class Config {
 	final Properties properties;
+	private boolean modified = false;
+	private final File file;
 	private final Set<String> allowedProperties = new HashSet<String>();
 	private static final String commentSeparator = "$$";
 
-	public Config(File name) {
+	public Config(File file) {
+		this.file = file;
 		properties = new Properties();
 		try {
-			properties.load(new FileInputStream(name));
+			properties.load(new FileInputStream(file));
 		} catch (IOException e) {
+			modified = true;
 			CoreMod.log.info("Couldn't load properties file", e);
 			// File not found/invalid, don't load old properties.
 		}
@@ -44,7 +48,11 @@ public class Config {
 		allowedProperties.add(name);
 		String old = properties.getProperty(name);
 		def = old == null ? def : stripComment(old);
-		properties.setProperty(name, addComment(def, description));
+		String result = addComment(def, description);
+		if (!result.equals(old)) {
+			modified = true;
+			properties.setProperty(name, result);
+		}
 	}
 
 	public boolean getBool(String name) {
@@ -60,5 +68,15 @@ public class Config {
 			throw null;
 		}
 		return stripComment(value);
+	}
+
+	public void save() {
+		if (modified) {
+			try {
+				properties.store(new FileOutputStream(file), "NTweaks config");
+			} catch (IOException e) {
+				CoreMod.log.error("Failed to save log file", e);
+			}
+		}
 	}
 }

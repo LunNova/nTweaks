@@ -84,6 +84,8 @@ public class CoreMod implements IFMLLoadingPlugin {
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
 
 		addClientPatch("tileEntityCullingCheckOrder", "Check tile entity range culling before frustrum culling", false); // TODO determine if this actually helps
+
+		config.save();
 	}
 
 	@Override
