@@ -14,6 +14,7 @@ import java.util.*;
 
 @IFMLLoadingPlugin.SortingIndex(1001) // Magic value, after deobf transformer.
 public class CoreMod implements IFMLLoadingPlugin {
+	public static Config config = new Config(new File((File) cpw.mods.fml.relauncher.FMLInjectionData.data()[6], "config/NTweaks.cfg"));
 	private static boolean isClient = FMLLaunchHandler.side() == Side.CLIENT;
 	public static final Logger log = LogManager.getLogger("NTweaks");
 
@@ -49,11 +50,14 @@ public class CoreMod implements IFMLLoadingPlugin {
 	}
 
 	private void addPatch(String name, String description, boolean enabledByDefault) {
-		InputStream is = CoreMod.class.getResourceAsStream("/" + name + ".json");
-		if (is == null) {
-			ModPatcher.getPatcher().readPatchesFromXmlInputStream(CoreMod.class.getResourceAsStream("/" + name + ".xml"));
-		} else {
-			ModPatcher.getPatcher().readPatchesFromJsonInputStream(is);
+		config.add(name, description, String.valueOf(enabledByDefault));
+		if (config.getBool(name)) {
+			InputStream is = CoreMod.class.getResourceAsStream("/" + name + ".json");
+			if (is == null) {
+				ModPatcher.getPatcher().readPatchesFromXmlInputStream(CoreMod.class.getResourceAsStream("/" + name + ".xml"));
+			} else {
+				ModPatcher.getPatcher().readPatchesFromJsonInputStream(is);
+			}
 		}
 	}
 

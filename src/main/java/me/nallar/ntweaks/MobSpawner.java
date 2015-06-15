@@ -191,8 +191,8 @@ public class MobSpawner {
 					} else {
 						ssY = getPseudoRandomHeightValue(ssX, ssZ, worldServer, surface, gap);
 						if (ssY <= 0 ||
-								!worldServer.getBlock(ssX, ssY - 1, ssZ).getMaterial().isOpaque() ||
-								!worldServer.getBlock(ssX, ssY - 1, ssZ).canCreatureSpawn(creatureType, worldServer, ssX, ssY - 1, ssZ)) {
+							!worldServer.getBlock(ssX, ssY - 1, ssZ).getMaterial().isOpaque() ||
+							!worldServer.getBlock(ssX, ssY - 1, ssZ).canCreatureSpawn(creatureType, worldServer, ssX, ssY - 1, ssZ)) {
 							continue;
 						}
 					}

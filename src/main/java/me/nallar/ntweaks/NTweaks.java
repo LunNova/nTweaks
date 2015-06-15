@@ -6,6 +6,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import me.nallar.ntweaks.coremod.CoreMod;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -19,10 +20,12 @@ public class NTweaks {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(new UnloadTickHandler());
+		if (CoreMod.config.getBool("dontLoadSpawnChunks")) {
+			FMLCommonHandler.instance().bus().register(new UnloadTickHandler());
+		}
 	}
 
-	@SubscribeEvent (priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void worldUnload(WorldEvent.Unload event) {
 		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), !event.world.isRemote);
 	}
@@ -36,8 +39,8 @@ public class NTweaks {
 				for (WorldServer worldServer : MinecraftServer.getServer().worldServers) {
 					int id = worldServer.provider.dimensionId;
 					if (id != 0
-							&& worldServer.getChunkProvider().getLoadedChunkCount() == 0
-							&& worldServer.playerEntities.isEmpty()) {
+						&& worldServer.getChunkProvider().getLoadedChunkCount() == 0
+						&& worldServer.playerEntities.isEmpty()) {
 						DimensionManager.unloadWorld(id);
 					}
 				}
