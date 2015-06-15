@@ -14,9 +14,9 @@ import java.util.*;
 
 @IFMLLoadingPlugin.SortingIndex(1001) // Magic value, after deobf transformer.
 public class CoreMod implements IFMLLoadingPlugin {
+	public static final Logger log = LogManager.getLogger("NTweaks");
 	public static Config config = new Config(new File((File) cpw.mods.fml.relauncher.FMLInjectionData.data()[6], "config/NTweaks.cfg"));
 	private static boolean isClient = FMLLaunchHandler.side() == Side.CLIENT;
-	public static final Logger log = LogManager.getLogger("NTweaks");
 
 	private static void logToFile() {
 		FileAppender fa = FileAppender.createAppender("./logs/NTweaks.log", "false", "false", "PatcherAppender", "true", "true", "true", null, null, "false", null, null);
