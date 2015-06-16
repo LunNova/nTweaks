@@ -79,7 +79,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 
 		addPatch("mobSpawning", "Improved mob spawning algorithm which scales mob caps at night and has better performance.", true);
 
-		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks, allow worlds to unload.", true);
+		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks, allow worlds to unload.", false);
 
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
 

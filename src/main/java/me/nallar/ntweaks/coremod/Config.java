@@ -56,6 +56,7 @@ public class Config {
 	}
 
 	public boolean getBool(String name) {
+		CoreMod.log.info("Got value " + getString(name) + " for " + name);
 		return Boolean.parseBoolean(getString(name));
 	}
 
