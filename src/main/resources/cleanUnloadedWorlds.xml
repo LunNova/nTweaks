@@ -6,10 +6,17 @@
 	</fixJourneymapCrashWithWorldUnload>
 	<fixMorphBugWithWorldUnload>
 		<class id="morph.common.morph.MorphState">
-			<insertCodeAfter code="
+			<insertCodeAfter finally="" code="{
 				if (entInstance != null) {
 					me.nallar.ntweaks.NTweaks.morphEntities.add(new java.lang.ref.WeakReference(entInstance));
-				}"/>
+				}
+			}">readTag</insertCodeAfter>
+			<replaceMethodCall method="self.writeFakeTags" code="{
+				if (entInstance != null) {
+					me.nallar.ntweaks.NTweaks.morphEntities.add(new java.lang.ref.WeakReference(entInstance));
+				}
+				$_ = $proceed($$);
+			}"/>
 		</class>
 	</fixMorphBugWithWorldUnload>
 	<fixRandomThingsBugWithWorldUnloads>

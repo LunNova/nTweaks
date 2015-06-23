@@ -21,6 +21,7 @@ import java.util.*;
 
 @Mod(modid = "nTweaks", name = "nTweaks", version = "1.7.10", acceptableRemoteVersions = "*")
 public class NTweaks {
+	private static final boolean cleanWorlds = CoreMod.cleanUnloadedWorlds;
 	private final MemoryLeakDetector memoryLeakDetector = new MemoryLeakDetector(300);
 	public static final ArrayList<WeakReference<Entity>> morphEntities = new ArrayList<WeakReference<Entity>>();
 
@@ -34,8 +35,10 @@ public class NTweaks {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void worldUnload(WorldEvent.Unload event) {
-		CoreMod.log.error("World unloading", new Throwable());
-		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), CoreMod.cleanUnloadedWorlds);
+		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), cleanWorlds);
+		if (!cleanWorlds) {
+			return;
+		}
 		if (event.world.isRemote || event.world.provider.dimensionId != 0) {
 			removeOldMorphWorlds(event.world);
 		}
@@ -66,6 +69,9 @@ public class NTweaks {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void worldLoad(WorldEvent.Load event) {
+		if (!cleanWorlds) {
+			return;
+		}
 		List<WeakReference<Entity>> toRemove = new ArrayList<WeakReference<Entity>>();
 		for (WeakReference<Entity> w : morphEntities) {
 			Entity e = w.get();
