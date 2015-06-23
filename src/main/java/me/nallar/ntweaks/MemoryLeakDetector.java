@@ -1,6 +1,7 @@
 package me.nallar.ntweaks;
 
 import me.nallar.ntweaks.coremod.CoreMod;
+import org.apache.logging.log4j.Level;
 
 import java.lang.ref.*;
 import java.lang.reflect.*;
@@ -13,7 +14,7 @@ public class MemoryLeakDetector {
 	private final Map<Long, LeakCheckEntry> scheduledObjects = new ConcurrentHashMap<Long, LeakCheckEntry>();
 
 	public MemoryLeakDetector(final long waitTimeSeconds) {
-		if (waitTimeSeconds < 10) {
+		if (waitTimeSeconds < 120) {
 			throw new IllegalArgumentException("Wait time unreasonably low, will only get false positives");
 		}
 		this.waitTimeSeconds = waitTimeSeconds;
@@ -22,10 +23,13 @@ public class MemoryLeakDetector {
 	public synchronized void scheduleLeakCheck(Object o, String oDescription_, final boolean clean) {
 		try {
 			if (clean) {
-				scheduledThreadPoolExecutor.schedule(new CleanerTask(o), Math.min(waitTimeSeconds / 2, 20), TimeUnit.SECONDS);
+				// Schedule cleaning of the checked object after a short delay.
+				// CleanerTask uses weak reference - ideally the object will already be GCd by the time this runs and no
+				// cleaning will be needed.
+				scheduledThreadPoolExecutor.schedule(new CleanerTask(o), 40, TimeUnit.SECONDS);
 			}
 			final long id = System.identityHashCode(o);
-			final String oDescription = (oDescription_ == null ? "" : oDescription_ + " : ") + o.getClass() + '@' + System.identityHashCode(o) + ':' + id;
+			final String oDescription = (oDescription_ == null ? "" : oDescription_ + " : ") + description(o);
 			scheduledObjects.put(id, new LeakCheckEntry(o, oDescription));
 			scheduledThreadPoolExecutor.schedule(new Runnable() {
 				@Override
@@ -35,13 +39,17 @@ public class MemoryLeakDetector {
 					if (o == null) {
 						CoreMod.log.trace("Object likely to be leaked " + leakCheckEntry.description + " has been removed normally.");
 					} else {
-						CoreMod.log.trace("Probable memory leak detected. \"" + leakCheckEntry.description + "\" has not been garbage collected after " + waitTimeSeconds + "s.");
+						CoreMod.log.log(clean ? Level.TRACE : Level.INFO, "Probable memory leak detected. \"" + leakCheckEntry.description + "\" has not been garbage collected after " + waitTimeSeconds + "s.");
 					}
 				}
 			}, waitTimeSeconds, TimeUnit.SECONDS);
 		} catch (Throwable t) {
 			CoreMod.log.error("Failed to schedule leak check for " + oDescription_, t);
 		}
+	}
+
+	private static String description(Object o) {
+		return String.valueOf(o.getClass()) + '@' + System.identityHashCode(o);
 	}
 
 	/**
@@ -51,6 +59,7 @@ public class MemoryLeakDetector {
 	 * @param o Object to clean.
 	 */
 	public static void clean(Object o) {
+		CoreMod.log.debug("Cleaning object " + description(o));
 		Class c = o.getClass();
 		while (c != null) {
 			for (Field field : c.getDeclaredFields()) {
@@ -69,15 +78,18 @@ public class MemoryLeakDetector {
 	}
 
 	private static class CleanerTask extends TimerTask {
-		final Object toClean;
+		final WeakReference<Object> toClean;
 
 		CleanerTask(final Object toClean) {
-			this.toClean = toClean;
+			this.toClean = new WeakReference<Object>(toClean);
 		}
 
 		@Override
 		public void run() {
-			clean(toClean);
+			Object toClean = this.toClean.get();
+			if (toClean != null) {
+				clean(toClean);
+			}
 		}
 	}
 

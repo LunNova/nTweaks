@@ -4,12 +4,6 @@
 			<replaceMethod code="return false;">shouldLoadSpawn</replaceMethod>
 			<insertCodeBefore code="$1 = false;">getIDs(Z)[Ljava/lang/Integer;</insertCodeBefore>
 		</class>
-		<class id="net.minecraft.world.gen.ChunkProviderServer">
-			<replaceMethod code="
-			this.^field:ChunkProviderServer/chunksToUnload^.add(($w) me.nallar.ntweaks.Util.chunkKey($1, $2));
-			">unloadChunksIfNotNearSpawn</replaceMethod>
-			<replaceMethodCall code="$_ = (($1 == 0) || $proceed($$));" method="^method:ChunkProviderServer/shouldLoadSpawn^">unloadQueuedChunks</replaceMethodCall>
-		</class>
 	</dontLoadSpawn>
 	<fixRandomThingsBugWithWorldUnloads>
 		<class id="lumien.randomthings.Handler.Spectre.SpectreHandler">

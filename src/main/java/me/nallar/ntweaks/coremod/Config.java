@@ -41,6 +41,10 @@ public class Config {
 		return value.trim();
 	}
 
+	public void add(String name, String description, boolean def) {
+		add(name, description, String.valueOf(def));
+	}
+
 	public void add(String name, String description, String def) {
 		if (def == null) {
 			throw null;
@@ -56,7 +60,6 @@ public class Config {
 	}
 
 	public boolean getBool(String name) {
-		CoreMod.log.info("Got value " + getString(name) + " for " + name);
 		return Boolean.parseBoolean(getString(name));
 	}
 

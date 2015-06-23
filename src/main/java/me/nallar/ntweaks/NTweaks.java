@@ -20,14 +20,14 @@ public class NTweaks {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
-		if (CoreMod.config.getBool("dontLoadSpawnChunks")) {
+		if (CoreMod.config.getBool("unloadAllWorlds")) {
 			FMLCommonHandler.instance().bus().register(new UnloadTickHandler());
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void worldUnload(WorldEvent.Unload event) {
-		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), !event.world.isRemote);
+		memoryLeakDetector.scheduleLeakCheck(event.world, "World " + event.world.provider.getDimensionName(), CoreMod.config.getBool("cleanUnloadedWorlds"));
 	}
 
 	public static class UnloadTickHandler {

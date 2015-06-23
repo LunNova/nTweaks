@@ -77,9 +77,13 @@ public class CoreMod implements IFMLLoadingPlugin {
 	public void injectData(Map<String, Object> stringObjectMap) {
 		logToFile();
 
+		config.add("cleanUnloadedWorlds", "Unloads all contents of unloaded worlds. Fixes memory leaks. If it causes an error, a mod is leaking world objects", true);
+
+		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks", true);
+
 		addPatch("mobSpawning", "Improved mob spawning algorithm which scales mob caps at night and has better performance.", true);
 
-		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks, allow worlds to unload.", false);
+		addPatch("unloadAllWorlds", "Allows all worlds other than overworld to unload. Incompatible with mods which assume their custom dimensions won't unload", true);
 
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
 
