@@ -1,0 +1,31 @@
+<patchGroups>
+	<fixJourneymapCrashWithWorldUnload>
+		<class id="net.techbrew.journeymap.ui.minimap.MiniMap">
+			<insertCodeBefore code="this.player = this.mc.field_71439_g;">reset</insertCodeBefore>
+		</class>
+	</fixJourneymapCrashWithWorldUnload>
+	<fixMorphBugWithWorldUnload>
+		<class id="morph.common.morph.MorphState">
+			<insertCodeAfter code="
+				if (entInstance != null) {
+					me.nallar.ntweaks.NTweaks.morphEntities.add(new java.lang.ref.WeakReference(entInstance));
+				}"/>
+		</class>
+	</fixMorphBugWithWorldUnload>
+	<fixRandomThingsBugWithWorldUnloads>
+		<class id="lumien.randomthings.Handler.Spectre.SpectreHandler">
+			<addField field="counter" fieldClass="int" code="0"/>
+			<insertCodeBefore code="{
+				if (counter++ % 40 != 0) {
+					return;
+				}
+				worldObj = net.minecraftforge.common.DimensionManager.getWorld(spectreDimensionID);
+				if (worldObj == null) {
+					return;
+				}
+			}">update
+			</insertCodeBefore>
+			<replaceMethodCall method="func_82737_E" code="$_ = 0;">update</replaceMethodCall>
+		</class>
+	</fixRandomThingsBugWithWorldUnloads>
+</patchGroups>

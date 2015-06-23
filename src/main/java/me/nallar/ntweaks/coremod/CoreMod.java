@@ -17,6 +17,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 	public static final Logger log = LogManager.getLogger("NTweaks");
 	public static Config config = new Config(new File((File) cpw.mods.fml.relauncher.FMLInjectionData.data()[6], "config/NTweaks.cfg"));
 	private static boolean isClient = FMLLaunchHandler.side() == Side.CLIENT;
+	public static boolean cleanUnloadedWorlds = true;
 
 	private static void logToFile() {
 		FileAppender fa = FileAppender.createAppender("./logs/NTweaks.log", "false", "false", "PatcherAppender", "true", "true", "true", null, null, "false", null, null);
@@ -93,7 +94,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 
 		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks", true);
 		addPatch("unloadAllWorlds", "Allows all worlds other than overworld to unload. Incompatible with mods which assume their custom dimensions won't unload", true);
-		config.add("cleanUnloadedWorlds", "Unloads all contents of unloaded worlds. Fixes memory leaks. If it causes an error, a mod is leaking world objects", true);
+		addPatch("cleanUnloadedWorlds", "Unloads all contents of unloaded worlds. Fixes memory leaks. If it causes an error, a mod is leaking world objects", true);
 
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
 		addClientPatch("tileEntityCullingCheckOrder", "Check tile entity range culling before frustrum culling", false); // TODO determine if this actually helps
@@ -101,6 +102,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 		config.save();
 
 		mobSpawningMultiplier = getMobSpawningMultiplier(config.get("mobSpawningMultiplier"));
+		cleanUnloadedWorlds = config.getBool("cleanUnloadedWorlds");
 	}
 
 	@Override

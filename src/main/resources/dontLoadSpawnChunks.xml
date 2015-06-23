@@ -5,19 +5,4 @@
 			<insertCodeBefore code="$1 = false;">getIDs(Z)[Ljava/lang/Integer;</insertCodeBefore>
 		</class>
 	</dontLoadSpawn>
-	<fixRandomThingsBugWithWorldUnloads>
-		<class id="lumien.randomthings.Handler.Spectre.SpectreHandler">
-			<addField field="counter" fieldClass="int" code="0"/>
-			<insertCodeBefore code="{
-				if (counter++ % 40 != 0) {
-					return;
-				}
-				worldObj = net.minecraftforge.common.DimensionManager.getWorld(spectreDimensionID);
-				if (worldObj == null) {
-					return;
-				}
-			}">update</insertCodeBefore>
-			<replaceMethodCall method="func_82737_E" code="$_ = 0;">update</replaceMethodCall>
-		</class>
-	</fixRandomThingsBugWithWorldUnloads>
 </patchGroups>
