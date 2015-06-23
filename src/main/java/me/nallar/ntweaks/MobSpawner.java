@@ -27,7 +27,7 @@ public class MobSpawner {
 	private static final int closeRange = 1;
 	private static final int farRange = 5;
 	private static final int spawnVariance = 6;
-	private static final int clumping = 6;
+	private static final int clumping = 7;
 	private static final int maxChunksPerPlayer = square(farRange * 2) - square(closeRange * 2);
 	private static int surfaceChance;
 	private static int gapChance;
@@ -85,7 +85,7 @@ public class MobSpawner {
 		if (worldServer.getWorldTime() % clumping != 0) {
 			return true;
 		}
-		float entityMultiplier = worldServer.playerEntities.size() * CoreMod.getMobSpawningMultiplier() * 0.66f;
+		float entityMultiplier = worldServer.playerEntities.size() * CoreMod.mobSpawningMultiplier;
 		if (entityMultiplier == 0) {
 			return true;
 		}

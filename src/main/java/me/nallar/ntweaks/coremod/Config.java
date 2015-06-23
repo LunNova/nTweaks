@@ -60,10 +60,10 @@ public class Config {
 	}
 
 	public boolean getBool(String name) {
-		return Boolean.parseBoolean(getString(name));
+		return Boolean.parseBoolean(get(name));
 	}
 
-	private String getString(String name) {
+	public String get(String name) {
 		if (!allowedProperties.contains(name)) {
 			throw new IllegalArgumentException("Property " + name + " does not exist");
 		}

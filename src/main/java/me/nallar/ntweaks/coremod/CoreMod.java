@@ -26,8 +26,19 @@ public class CoreMod implements IFMLLoadingPlugin {
 		((org.apache.logging.log4j.core.Logger) log).addAppender(fa);
 	}
 
-	public static float getMobSpawningMultiplier() {
-		return 1f;
+	public static float mobSpawningMultiplier = 1.0f;
+
+	public static float getMobSpawningMultiplier(String config) {
+		try {
+			float multiplier = Float.parseFloat(config);
+			if (multiplier < 0) {
+				throw new NumberFormatException("Mob spawning multiplier must be >= 0");
+			}
+			return multiplier;
+		} catch (NumberFormatException e) {
+			log.error("Invalid config entry for mob spawning multiplier", e);
+			return 1;
+		}
 	}
 
 	public static boolean shouldHandleSpawning(WorldServer worldServer) {
@@ -77,19 +88,19 @@ public class CoreMod implements IFMLLoadingPlugin {
 	public void injectData(Map<String, Object> stringObjectMap) {
 		logToFile();
 
-		config.add("cleanUnloadedWorlds", "Unloads all contents of unloaded worlds. Fixes memory leaks. If it causes an error, a mod is leaking world objects", true);
+		addPatch("mobSpawning", "Improved mob spawning algorithm which scales mob caps at night and has better performance.", true);
+		config.add("mobSpawningMultiplier", "Multiplier for mob spawning. 1 = normal, 0 = none, 3.14 = mobs everywhere", String.valueOf(mobSpawningMultiplier));
 
 		addPatch("dontLoadSpawnChunks", "Don't load spawn chunks", true);
-
-		addPatch("mobSpawning", "Improved mob spawning algorithm which scales mob caps at night and has better performance.", true);
-
 		addPatch("unloadAllWorlds", "Allows all worlds other than overworld to unload. Incompatible with mods which assume their custom dimensions won't unload", true);
+		config.add("cleanUnloadedWorlds", "Unloads all contents of unloaded worlds. Fixes memory leaks. If it causes an error, a mod is leaking world objects", true);
 
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
-
 		addClientPatch("tileEntityCullingCheckOrder", "Check tile entity range culling before frustrum culling", false); // TODO determine if this actually helps
 
 		config.save();
+
+		mobSpawningMultiplier = getMobSpawningMultiplier(config.get("mobSpawningMultiplier"));
 	}
 
 	@Override
