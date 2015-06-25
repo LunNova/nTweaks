@@ -1,0 +1,94 @@
+<mods>
+	<!-- Didn't like to have a readable console anyway -->
+	<theWarOnLogSpam>
+		<class id="mcp.mobius.waila.Waila">
+			<replaceMethodCall method="printf" code="{ $_ = null; }">loadComplete</replaceMethodCall>
+		</class>
+		<class id="codechicken.microblock.MicroMaterialRegistry$">
+			<replaceMethodCall method="println" index="1" code="{ }">registerMaterial</replaceMethodCall>
+		</class>
+		<class id="buildcraft.core.Version">
+			<disable>check</disable>
+		</class>
+		<class id="aroma1997.core.version.ThreadVersionChecking">
+			<disable>run</disable>
+		</class>
+		<class id="aroma1997.core.Aroma1997Core">
+			<replaceMethodCall method="logServer" code="{ }">preInit,init,postInit,serverStartup,serverStartedUp</replaceMethodCall>
+		</class>
+		<class id="com.dmillerw.remoteIO.core.handler.PacketHandler">
+			<replaceMethodCall method="info" code="{ }">sendConfigData</replaceMethodCall>
+		</class>
+		<class id="magicbees.world.feature.FeatureHive">
+			<replaceFieldUsage field="logSpawns" writeCode="logSpawns = false;">^static^</replaceFieldUsage>
+		</class>
+		<class id="net.bdew.lib.recipes.gencfg.GenericConfigLoader$class">
+			<replaceMethodCall method="info" code="{ }">processConfigStatement</replaceMethodCall>
+		</class>
+		<class id="codechicken.nei.NEIClientConfig">
+			<replaceMethodCall method="println" code="{ }">bootNEI</replaceMethodCall>
+		</class>
+		<class id="codechicken.nei.NEIServerConfig">
+			<replaceMethodCall method="println" code="{ }">loadPlayer,unloadPlayer</replaceMethodCall>
+		</class>
+		<class id="codechicken.nei.NEISPH">
+			<replaceMethodCall method="println" code="{ }">sendHasServerSideTo</replaceMethodCall>
+		</class>
+		<class id="calclavia.components.CalclaviaLoader">
+			<replaceMethodCall method="info" code="{ }">requireItem,requireBlock</replaceMethodCall>
+		</class>
+		<class id="denoflionsx.denLib.Mod.Handlers.NewDictHandler.DenLibDictionaryHandler">
+			<replaceMethodCall method="log" code="{ }">doEvent</replaceMethodCall>
+		</class>
+		<class id="denoflionsx.denLib.Mod.Handlers.NewFluidHandler.DenLibFluidHandler">
+			<replaceMethodCall method="log" code="{ }">onEvent</replaceMethodCall>
+		</class>
+		<class id="
+		mods.natura.plugins.PluginController
+		tconstruct.plugins.PluginController
+		">
+			<replaceMethodCall method="info" code="{ }">^all^</replaceMethodCall>
+		</class>
+		<class id="Reika.GeoStrata.Guardian.GuardianStoneManager">
+			<replaceMethodCall method="log" index="0" code="{ }">save,read</replaceMethodCall>
+		</class>
+		<class id="Reika.RotaryCraft.Auxiliary.RecipeManagers">
+			<replaceMethodCall method="log" code="{ }">addOreRecipes</replaceMethodCall>
+		</class>
+		<class id="
+		Reika.DragonAPI.Base.DragonAPIMod
+		Reika.DragonAPI.Base.ModHandlerBase">
+			<replaceMethodCall method="pConsole" code="{ }"/>
+		</class>
+		<class id="Reika.DragonAPI.Libraries.Java.ReikaObfuscationHelper">
+			<replaceMethodCall method="pConsole" code="{ }">addField,addMethod</replaceMethodCall>
+		</class>
+		<class id="Reika.DragonAPI.Base.PlayerTracker">
+			<replaceMethodCall method="pConsole" index="0" code="{ }">save,read</replaceMethodCall>
+		</class>
+		<class id="Reika.DragonAPI.ModList">
+			<replaceMethodCall method="pConsole" index="0" code="{ }" silent="true"/>
+			<replaceMethodCall method="pConsole" index="1" code="{ }" silent="true"/>
+			<replaceMethodCall method="pConsole" index="2" code="{ }" silent="true"/>
+		</class>
+		<class id="Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary">
+			<newField static="" field="logger" class="java.util.logging.Logger" code="none"/>
+			<final field="logger"/>
+			<addStaticInitializer code="{
+				logger = java.util.logging.Logger.getLogger(&quot;Dragon&quot;);
+				logger.setParent(java.util.logging.Logger.getLogger(&quot;ForgeModLoader&quot;));
+				logger.setUseParentHandlers(true);
+			}"/>
+			<replaceMethod code="{
+				if ($1 == null) {
+					logger.info(&quot;null passed to Reika pConsole&quot;);
+				} else if ($1 instanceof String || $1 instanceof Integer || $1 instanceof Boolean) {
+					logger.info(String.valueOf($1));
+				} else {
+					logger.info(String.valueOf($1) + &quot; of class &quot; + $1.getClass().getName());
+				}
+			}">pConsole(Ljava/lang/Object;)V
+			</replaceMethod>
+		</class>
+	</theWarOnLogSpam>
+</mods>

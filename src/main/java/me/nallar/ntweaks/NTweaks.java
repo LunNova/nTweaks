@@ -96,7 +96,6 @@ public class NTweaks {
 					if (id != 0
 						&& worldServer.getChunkProvider().getLoadedChunkCount() == 0
 						&& worldServer.playerEntities.isEmpty()) {
-						CoreMod.log.info("Unloading world " + id);
 						DimensionManager.unloadWorld(id);
 					}
 				}

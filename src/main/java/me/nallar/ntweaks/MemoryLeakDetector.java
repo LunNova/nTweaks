@@ -60,7 +60,6 @@ public class MemoryLeakDetector {
 	 * @param o Object to clean.
 	 */
 	public static void clean(Object o) {
-		CoreMod.log.debug("Cleaning object " + description(o));
 		Class c = o.getClass();
 		while (c != null) {
 			for (Field field : c.getDeclaredFields()) {

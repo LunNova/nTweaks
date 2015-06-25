@@ -95,6 +95,8 @@ public class CoreMod implements IFMLLoadingPlugin {
 		addPatch("unloadAllWorlds", "Allows all worlds other than overworld to unload. Incompatible with some mods which assume their custom dimensions won't unload", true);
 		addPatch("cleanUnloadedWorlds", "Unloads all contents of unloaded worlds. Fixes memory leaks. If it causes an error, a mod is leaking world objects", true);
 
+		addPatch("logSpamMustDie", "Disable log clutter from many mods", true);
+
 		addClientPatch("tileEntityRenderRange", "Reduces the default tileEntity render range", true);
 		addClientPatch("tileEntityCullingCheckOrder", "Check tile entity range culling before frustrum culling", false); // TODO determine if this actually helps
 
