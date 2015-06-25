@@ -55,7 +55,6 @@ public class NTweaks {
 				toRemove.add(w);
 				continue;
 			}
-			CoreMod.log.info("Entity at remove " + e + " has worldObj " + e.worldObj);
 			if (e.worldObj == remove) {
 				if (remove.isRemote) {
 					e.worldObj = null;
@@ -79,7 +78,6 @@ public class NTweaks {
 				toRemove.add(w);
 				continue;
 			}
-			CoreMod.log.info("Entity at load " + e + " has worldObj " + e.worldObj);
 			if (e.worldObj == null || e.worldObj.isRemote || e.worldObj.provider == null) {
 				e.worldObj = event.world;
 			}
@@ -92,7 +90,7 @@ public class NTweaks {
 
 		@SubscribeEvent
 		public void tick(TickEvent.ServerTickEvent tick) {
-			if (tick.phase == TickEvent.Phase.END && (++counter % 2000 == 100)) {
+			if (tick.phase == TickEvent.Phase.END && (++counter % 2400 == 100)) {
 				for (WorldServer worldServer : MinecraftServer.getServer().worldServers) {
 					int id = worldServer.provider.dimensionId;
 					if (id != 0

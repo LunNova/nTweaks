@@ -1,4 +1,9 @@
 <patchGroups>
+	<fixFactorizationCrashWithWorldUnload>
+		<class id="factorization.fzds.Hammer">
+			<replaceMethodCall method="shouldLoadSpawn" code="$_ = true;">serverStart</replaceMethodCall>
+		</class>
+	</fixFactorizationCrashWithWorldUnload>
 	<fixJourneymapCrashWithWorldUnload>
 		<class id="net.techbrew.journeymap.ui.minimap.MiniMap">
 			<insertCodeBefore code="this.player = this.mc.field_71439_g;">reset</insertCodeBefore>

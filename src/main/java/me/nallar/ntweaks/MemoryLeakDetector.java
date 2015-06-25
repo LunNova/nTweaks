@@ -1,5 +1,6 @@
 package me.nallar.ntweaks;
 
+import lombok.val;
 import me.nallar.ntweaks.coremod.CoreMod;
 import org.apache.logging.log4j.Level;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.*;
 public class MemoryLeakDetector {
 	private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
 	private final long waitTimeSeconds;
-	private final Map<Long, LeakCheckEntry> scheduledObjects = new ConcurrentHashMap<Long, LeakCheckEntry>();
+	private final Map<Integer, LeakCheckEntry> scheduledObjects = new ConcurrentHashMap<Integer, LeakCheckEntry>();
 
 	public MemoryLeakDetector(final long waitTimeSeconds) {
 		if (waitTimeSeconds < 120) {
@@ -28,7 +29,7 @@ public class MemoryLeakDetector {
 				// cleaning will be needed.
 				scheduledThreadPoolExecutor.schedule(new CleanerTask(o), 40, TimeUnit.SECONDS);
 			}
-			final long id = System.identityHashCode(o);
+			val id = System.identityHashCode(o);
 			final String oDescription = (oDescription_ == null ? "" : oDescription_ + " : ") + description(o);
 			scheduledObjects.put(id, new LeakCheckEntry(o, oDescription));
 			scheduledThreadPoolExecutor.schedule(new Runnable() {

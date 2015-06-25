@@ -67,6 +67,7 @@ configurations {
 dependencies {
     provided 'com.google.guava:guava:18.0'
     compile group:'me.nallar', name:'modpatcher', version:'1.7.10-SNAPSHOT', changing: true
+	provided 'org.projectlombok:lombok:1.16.4'
 }
 
 jar {

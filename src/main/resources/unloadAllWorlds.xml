@@ -1,10 +1,28 @@
 <patchGroups>
+	<dontLoadSpawn>
+		<class id="net.minecraftforge.common.DimensionManager">
+			<replaceMethod code="return false;">shouldLoadSpawn</replaceMethod>
+			<insertCodeBefore code="$1 = false;">getIDs(Z)[Ljava/lang/Integer;</insertCodeBefore>
+		</class>
+	</dontLoadSpawn>
 	<allowWorldUnloads>
 		<class id="net.minecraft.world.gen.ChunkProviderServer">
 			<replaceMethod code="
 			this.^field:ChunkProviderServer/chunksToUnload^.add(($w) me.nallar.ntweaks.Util.chunkKey($1, $2));
 			">unloadChunksIfNotNearSpawn</replaceMethod>
-			<replaceMethodCall code="$_ = (($1 == 0) || $proceed($$));" method="^method:ChunkProviderServer/shouldLoadSpawn^">unloadQueuedChunks</replaceMethodCall>
+			<replaceMethodCall code="$_ = true;" method="^method:ChunkProviderServer/shouldLoadSpawn^">unloadQueuedChunks</replaceMethodCall>
 		</class>
 	</allowWorldUnloads>
+	<whatUnloadsWorlds requireProperty="debug.whatUnloadsWorlds">
+		<class id="net.minecraftforge.common.DimensionManager">
+			<insertCodeBefore code="new Exception().printStackTrace();">
+				unloadWorld
+			</insertCodeBefore>
+		</class>
+	</whatUnloadsWorlds>
+	<chickenChunksPlsStahp>
+		<class id="codechicken.chunkloader.ChunkLoaderManager">
+			<replaceMethodCall method="unloadWorld" code="{}">cleanChunks</replaceMethodCall>
+		</class>
+	</chickenChunksPlsStahp>
 </patchGroups>
