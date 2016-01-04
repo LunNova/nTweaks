@@ -1,5 +1,6 @@
 package me.nallar.ntweaks;
 
+import com.google.common.base.Splitter;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -22,6 +23,7 @@ import java.util.*;
 @Mod(modid = "nTweaks", name = "nTweaks", version = "1.7.10", acceptableRemoteVersions = "*")
 public class NTweaks {
 	private static final boolean cleanWorlds = CoreMod.cleanUnloadedWorlds;
+	private static final Set<Integer> unloadWorldBlacklist = new HashSet<>();
 	private final MemoryLeakDetector memoryLeakDetector = new MemoryLeakDetector(300);
 	public static final ArrayList<WeakReference<Entity>> morphEntities = new ArrayList<WeakReference<Entity>>();
 
@@ -30,6 +32,10 @@ public class NTweaks {
 		MinecraftForge.EVENT_BUS.register(this);
 		if (CoreMod.config.getBool("unloadAllWorlds")) {
 			FMLCommonHandler.instance().bus().register(new UnloadTickHandler());
+		}
+		String unloadWorldBlacklist = CoreMod.config.get("unloadWorldBlacklist");
+		for (String part : Splitter.on(',').trimResults().omitEmptyStrings().split(unloadWorldBlacklist)) {
+			NTweaks.unloadWorldBlacklist.add(Integer.valueOf(part));
 		}
 	}
 
@@ -85,6 +91,14 @@ public class NTweaks {
 		morphEntities.removeAll(toRemove);
 	}
 
+	public static boolean canUnload(WorldServer worldServer) {
+		int id = worldServer.provider.dimensionId;
+		return id != 0
+			&& !unloadWorldBlacklist.contains(id)
+			&& worldServer.getChunkProvider().getLoadedChunkCount() == 0
+			&& worldServer.playerEntities.isEmpty();
+	}
+
 	public static class UnloadTickHandler {
 		private int counter = 0;
 
@@ -92,12 +106,8 @@ public class NTweaks {
 		public void tick(TickEvent.ServerTickEvent tick) {
 			if (tick.phase == TickEvent.Phase.END && (++counter % 2400 == 100)) {
 				for (WorldServer worldServer : MinecraftServer.getServer().worldServers) {
-					int id = worldServer.provider.dimensionId;
-					if (id != 0
-						&& worldServer.getChunkProvider().getLoadedChunkCount() == 0
-						&& worldServer.playerEntities.isEmpty()) {
-						DimensionManager.unloadWorld(id);
-					}
+					if (canUnload(worldServer))
+						DimensionManager.unloadWorld(worldServer.provider.dimensionId);
 				}
 			}
 		}

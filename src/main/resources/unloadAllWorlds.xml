@@ -1,7 +1,7 @@
 <patchGroups>
 	<dontLoadSpawn>
 		<class id="net.minecraftforge.common.DimensionManager">
-			<replaceMethod code="return false;">shouldLoadSpawn</replaceMethod>
+			<replaceMethod code="return !me.nallar.ntweaks.NTweaks.canUnload($1);">shouldLoadSpawn</replaceMethod>
 			<insertCodeBefore code="$1 = false;">getIDs(Z)[Ljava/lang/Integer;</insertCodeBefore>
 		</class>
 	</dontLoadSpawn>
