@@ -23,7 +23,7 @@ import java.util.*;
 @Mod(modid = "nTweaks", name = "nTweaks", version = "1.7.10", acceptableRemoteVersions = "*")
 public class NTweaks {
 	private static final boolean cleanWorlds = CoreMod.cleanUnloadedWorlds;
-	private static final Set<Integer> unloadWorldBlacklist = new HashSet<>();
+	private static final Set<Integer> unloadWorldBlacklist = new HashSet<Integer>();
 	private final MemoryLeakDetector memoryLeakDetector = new MemoryLeakDetector(300);
 	public static final ArrayList<WeakReference<Entity>> morphEntities = new ArrayList<WeakReference<Entity>>();
 
