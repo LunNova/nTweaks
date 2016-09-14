@@ -39,8 +39,8 @@ minecraft {
     runDir = "eclipse/assets"
 }
 
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 version = mcVersion + '-SNAPSHOT'
 group = 'me.nallar'
@@ -66,7 +66,7 @@ configurations {
 
 dependencies {
     provided 'com.google.guava:guava:18.0'
-    compile group:'me.nallar', name:'modpatcher', version:'1.7.10-SNAPSHOT', changing: true
+    compile group:'me.nallar', name:'ModPatcher', version:'1.7.10-SNAPSHOT', changing: true
 	provided 'org.projectlombok:lombok:1.16.4'
 }
 
